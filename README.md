@@ -1,4 +1,6 @@
 # Mass Curl Checker
+Check a list of URLs to make sure you are getting the right response.
+Perfect for quickly testing APIs.
 
 ## How To:
 1. Fill out **urls.txt** with a list of line-separated URLs
