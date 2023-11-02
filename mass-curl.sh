@@ -26,7 +26,7 @@ do
 	RESULT=$(curl "$URLTOTEST")
 	LINETESTCOUNT=$((LINETESTCOUNT+1))
 
-	if [[ "$RESULT" != "$EXPECTED" ]] 
+	if [ "$RESULT" != "$EXPECTED" ]
 	then
 	echo "__________________________"
 	echo "\nMISMATCH:\n"
