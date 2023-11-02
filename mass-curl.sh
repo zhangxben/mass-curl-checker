@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 EXPECTED=$(cat "expected.txt")
-URLCOUNT=$(wc -l "expected.txt")
+URLCOUNT=$(wc -l "urls.txt")
 
 cat <<EOF
     __  ______   __________    ________  ______  __ 
@@ -15,7 +15,7 @@ echo "Contact Ben Zhang for questions."
 echo "__________________________"
 echo "EXPECTED IS: $EXPECTED"
 echo "URLS TO TEST: $URLCOUNT"
-echo "__________________________ \n"
+echo "__________________________"
 LINETESTCOUNT=0
 ERRORCOUNT=0
 FAILEDURLS=""
@@ -23,24 +23,27 @@ FAILEDURLS=""
 while IFS="" read -r p || [ -n "$p" ]
 do
 	URLTOTEST="$p"
-	RESULT=$(curl "$URLTOTEST")
+	RESULT=$(curl $URLTOTEST)
 	LINETESTCOUNT=$((LINETESTCOUNT+1))
 
-	if [ "$RESULT" != "$EXPECTED" ]
+	if  [[ "$RESULT" != "$EXPECTED" ]]
 	then
 	echo "__________________________"
-	echo "\nMISMATCH:\n"
+	echo 'MISMATCH:'
 	echo "URL: $p"
 	echo "RESULT: $RESULT"
-	echo "__________________________\n"
+	echo "__________________________"
 	ERRORCOUNT=$((ERRORCOUNT+1))
-	FAILEDURLS="$FAILEDURLS\n$p"
+	FAILEDURLS=("$FAILEDURLS, $p")
 	fi
 done < urls.txt
 
-echo "\n\n__________________________"
-echo "\nMASS CURL RESULTS"
-echo "__________________________\n"
+echo "__________________________"
+echo "MASS CURL RESULTS"
+echo "__________________________"
 echo "Lines Tested: $LINETESTCOUNT"
 echo "Non-matching responses: $ERRORCOUNT"
-echo "Failed URLS:\n$FAILEDURLS"
+if [[ $ERRORCOUNT > 0 ]]
+then
+	echo "Failed URLs: $FAILEDURLS"
+fi
